@@ -27,16 +27,20 @@ public class UserGatewayImpl implements UserGateway {
 	@Override
 	public User createUser(User user) {
 		UserEntity userEntity= userMapper.toUserEntity(user);
-		
-		//Getting the adress 
-		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<Adress> rest= restTemplate.getForEntity("https://viacep.com.br/ws/"+user.getAdress().getCep()+"/json/", Adress.class);
-		
-		AdressEntity adEntity = adressMapper.toAdressEntity(rest.getBody());
-		userEntity.setAdress(adEntity);
+		userEntity.setAdress(getAdressFromThirdPartyService(user));
 		userEntity=userRepository.save(userEntity);
 		User userDomain = userMapper.toUser(userEntity);
 		return userDomain;
+	}
+	
+	
+	
+	
+	private AdressEntity getAdressFromThirdPartyService(User user) {
+		RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<Adress> rest= restTemplate.getForEntity("https://viacep.com.br/ws/"+user.getAdress().getCep()+"/json/", Adress.class);
+		AdressEntity adEntity = adressMapper.toAdressEntity(rest.getBody());
+		return adEntity;
 	}
 
 }
