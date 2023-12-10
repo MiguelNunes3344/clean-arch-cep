@@ -11,12 +11,11 @@
 ```json
 
 {
-    "id":1,
     "name":"User Name",
     "username":"user",
-    "password":"1123456",
+    "password":"00000000",
     "adress": {
-        "cep":"12345678"
+        "cep":"00000000"
     }
 }
 ```
